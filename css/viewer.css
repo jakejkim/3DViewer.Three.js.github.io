@@ -1,0 +1,105 @@
+﻿:root {
+    --transparent-color: rgba(255, 255, 255, .3);
+    --transparent-color-table: rgba(255, 255, 255, .4);
+    --transparent-color-table-selected: rgba(255, 255, 255, .8);
+    --default-background-color: #e9ecf3;
+}
+
+#viewer {
+    width: 100%;
+    height: 100%;
+}
+
+/*--------------
+   Top - message
+---------------*/
+.alert-box {
+    margin: 0 auto;
+    text-align: center;
+    vertical-align: central;
+    max-width:800px;
+    padding-top: 9px;
+    height: 40px;
+    background-color: var(--default-background-color);
+}
+
+#part-info {
+}
+
+/*--------------
+   Left - menu
+---------------*/
+.menu-selections {
+    margin-top: 15px;
+    left: 15px;
+    float: left;
+    width: 250px;
+    position: absolute;
+}
+
+    .menu-selections .form-control {
+        background-color: var(--transparent-color);
+    }
+
+/*--------------
+   Right - buttons 
+---------------*/
+.button-selections {
+    margin-top: 15px;
+    right: 15px;
+    float: right;
+    text-align: right;
+    position: absolute;
+}
+
+#frameComponentFilter .btn {
+    background-color: var(--transparent-color);
+    margin: 5px;
+    min-width: 180px;
+}
+
+
+/*--------------
+   Bottom - part infomation table
+---------------*/
+#close-btn {
+    float: right;
+    margin: 5px;
+}
+
+.part-info-table {
+    background-color: var(--transparent-color-table);
+}
+
+#parts-bom-body {
+}
+
+#parts-bom {
+    margin-top: 10px;
+    background-color: var(--transparent-color-table);
+}
+
+    #parts-bom .th {
+        font-size: smaller;
+    }
+
+.ignoredAssembly {
+    display: none;
+}
+
+.selected-row {
+    border: solid;
+    border-color: rgba(0, 0, 0, .1);
+    background-color: var(--transparent-color-table-selected);
+}
+
+/* side bar override */
+.ui.bottom.sidebar {
+    width: 100% !important;
+    max-height: 50% !important;
+    background-color: var(--transparent-color-table);
+}
+
+.model-samples {
+    background-color: antiquewhite;
+}

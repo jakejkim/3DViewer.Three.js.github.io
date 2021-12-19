@@ -1,0 +1,17 @@
+﻿
+@media (max-width: 768px) {
+    .btn {
+        width: 60px !important;
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+
+    .control-label{
+        font-size: 11px;
+    }
+
+    .form-control {
+        font-size: 11px;
+        width: 120px !important;
+    }
+}

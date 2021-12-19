@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta content="3D Viewer" name="description" />
+
+    <title>3D Viewer</title>
+
+    <!-- BEGIN STYLESHEET -->
+    <!-- Libraries -->
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" />
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-4.0.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="lib/semantic-ui-sidebar-2.3.0/sidebar.css" />
+
+    <!-- Layout -->
+    <link rel="stylesheet" type="text/css" href="css/layout/components.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout/default.css" />
+
+    <!-- Viewer -->
+    <link rel="stylesheet" type="text/css" href="css/viewer.css" />
+    <link rel="stylesheet" type="text/css" href="css/viewer-mobile.css" />
+    <!-- END STYLESHEET -->
+    <!-- BEGIN SCRIPT -->
+    <!-- Libraries -->
+    <script type="text/javascript" src="lib/jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="lib/underscore-1.8.3/underscore-min.js"></script>
+    <script type="text/javascript" src="lib/numeric-1.2.6/numeric-1.2.6.js"></script>
+    <script type="text/javascript" src="lib/semantic-ui-sidebar-2.3.0/sidebar.js"></script>
+    <script type="text/javascript" src="lib/datatables-1.10.10/datatables.js"></script>
+
+    <!-- Three.js -->
+    <script type="text/javascript" src="lib/three-js-r90/three.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/loaders/DDSLoader.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/loaders/MTLLoader.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/loaders/OBJLoader.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/controls/OrbitControls.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/controls/EventsControls.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/Detector.js"></script>
+    <script type="text/javascript" src="lib/three-js-r90/libs/stats.min.js"></script>
+
+    <!-- Viewer -->
+    <script type="text/javascript" src="js/viewer-data.js"></script>
+    <script type="text/javascript" src="js/position.js"></script>
+    <script type="text/javascript" src="js/viewer-camera.js"></script>
+    <script type="text/javascript" src="js/viewer-events.js"></script>
+    <script type="text/javascript" src="js/viewer-utils.js"></script>
+    <script type="text/javascript" src="js/viewer.js"></script>
+    <!-- END SCRIPT -->
+    <link rel="shortcut icon" href="favicon.ico" />
+
+</head>
+<body class="page-container-bg-solid pushable">
+
+    <!-- BEGIN NAV -->
+    <nav class="navbar bg-light">
+        <div class="container-fluid">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo col-md-1">
+                <a href="index.html">
+                    <img src="images/jake_logo.png" alt="logo" width="45" height="45" />
+                </a>
+            </div>
+            <!-- END LOGO -->
+            <!-- BEGIN OPTION BUTTONS -->
+
+            <div class="col-md-1">
+                <button class="btn blue-hoki btn-outline" id="normal-model">Normal</button>
+            </div>
+
+            <div class="col-md-1">
+                <button class="btn blue-hoki btn-outline" id="explode-model">Explode</button>
+            </div>
+
+            <div class="alert-box col-md-5" id="alert-message" role="alert">
+                Please select a model
+            </div>
+
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-1">
+                <button class="btn blue btn-outline" id="part-info">Part Info</button>
+            </div>
+
+        </div>
+
+        <!-- END OPTION BUTTONS -->
+
+    </nav>
+    <!-- END NAV -->
+    <!-- BEGIN CONTENT -->
+    <div class="menu-selections col-md-2 col-sm-4">
+        <!--<div class="form-group">
+            <label for="environment" class="control-label">Environment</label>
+            <select id="environment" class="form-control">
+                <option>DEV</option>
+            </select>
+        </div>-->
+
+        <div class="form-group">
+            <label for="models" class="control-label">Models</label>
+            <select id="models" class="form-control" onchange="init3D(this.value)">
+                <option selected="selected" value="select">Select a model</option>
+                <option class="model-samples" value="Frame_A">Sample Frame</option>
+                <!-- <option class="model-samples" value="craftsmanDoorClosed">Sample Frame 2</option>
+                                <option class="model-samples" value="door1">Sample Frame 3</option> -->
+            </select>
+        </div>
+    </div>
+
+    <!-- BEGIN BUTTONS -->
+    <div class="button-selections">
+        
+        <div id="frameComponentFilter">
+            <div class="form-group">
+                <button class="btn default btn-lg" id="filter-chassis">Show Frame</button>
+            </div>
+            <div class="form-group">
+                <button class="btn default btn-lg" id="filter-pads">Show Pads</button>
+            </div>
+            <div class="form-group">
+                <button class="btn default btn-lg" id="filter-all">Show All</button>
+            </div>
+        </div>
+    </div>
+    <!-- END BUTTONS -->
+    <!-- BEGIN PAGE BASE CONTENT -->
+
+    <div id="viewer"></div>
+
+    <!-- END PAGE BASE CONTENT -->
+    <!-- END CONTENT -->
+    <!-- END CONTAINER -->
+    <!-- BEGIN TABLE -->
+    <div class="ui bottom sidebar overlay animating menu">
+
+        <div class="part-info-table col-md-12">
+            <div class="portlet">
+                <div id="parts-bom-body" class="portlet-body" style="margin-top:10px;">
+
+                    <span class="caption-subject bold uppercase">
+                        Part Information
+
+                        <button id="close-btn" class="btn blue btn-outline">Close</button>
+                    </span>
+
+                    <table id="parts-bom" class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Quantity</th>
+                                <th>Part Number</th>
+                                <th>Profile</th>
+                                <th>Length</th>
+                                <th>Index Start</th>
+                                <th>Index End</th>
+                                <th>Width</th>
+                                <th>Height</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- END TABLE -->
+    <!-- BEGIN FOOTER -->
+    <div class="no-footer" />
+    <!-- END FOOTER -->
+
+</body>
+</html>
