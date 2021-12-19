@@ -7,35 +7,33 @@ var mouse = { x: 0, y: 0 };
 var partsDictionary = new Object();
 var partsMap = new Map();
 var widthMargin = 15; // prevent to display scrollbar
-var titlebarHeight = 70; 
-var heightMargin = titlebarHeight + widthMargin;
+var titleBarHeight = 70;
+var heightMargin = titleBarHeight + widthMargin;
 
-$(function () {
-    $('#normal-model').click(function () {
+$(function() {
+    modelPath = "Frame_A";
+    init3D(modelPath);
+
+    $("#normal-model").click(function() {
         if (scene !== undefined) {
             removeModel();
         }
 
-        // For debug
-        modelPath = "Frame_A";
         init3D(modelPath);
     });
-    $('#explode-model').click(function () {
+    $("#explode-model").click(function() {
         getExplode();
     });
-    $('#part-info').click(function () {
+    $("#part-info").click(function() {
         UTILS.displayPartInfo();
     });
 });
 
 function init3D(modelPath) {
-
-    if (!modelPath === 'select')
-        return;
+    if (!modelPath === "select") return;
 
     // check if webgl available on user's web browser
-    if (!Detector.webgl)
-        Detector.addGetWebGLMessage();
+    if (!Detector.webgl) Detector.addGetWebGLMessage();
 
     // canvas
     initCanvas();
@@ -47,24 +45,32 @@ function init3D(modelPath) {
     initRenderer();
 
     // model
-    // initialize the manager to handle all loaded events 
+    // initialize the manager to handle all loaded events
     manager = new THREE.LoadingManager();
-    manager.onStart = function (url, itemsLoaded, itemsTotal) {
-        var message = 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.';
+    manager.onStart = function(url, itemsLoaded, itemsTotal) {
+        var message =
+            "Started loading file: " +
+            url +
+            ".\nLoaded " +
+            itemsLoaded +
+            " of " +
+            itemsTotal +
+            " files.";
         setAlertMessage(message);
     };
 
-    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        var message = 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.';
+    manager.onProgress = function(url, itemsLoaded, itemsTotal) {
+        var message =
+            "Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files.";
         setAlertMessage(message);
     };
 
-    manager.onError = function (url) {
-        var message = 'Error occured while loading ' + url;
+    manager.onError = function(url) {
+        var message = "Error occurred while loading " + url;
         console.log(message);
     };
 
-    manager.onLoad = function () {    
+    manager.onLoad = function() {
         // set camera and control after model is loaded
         setModel();
     };
@@ -72,25 +78,23 @@ function init3D(modelPath) {
     THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
 
     var mtlLoader = new THREE.MTLLoader(manager);
-    mtlLoader.setPath('./models/'); // for HTML
-    mtlLoader.load(modelPath + '.mtl', function (materials) {        
-
+    mtlLoader.setPath("./models/"); // for HTML
+    mtlLoader.load(modelPath + ".mtl", function(materials) {
         materials.preload();
 
         var objLoader = new THREE.OBJLoader(manager);
         objLoader.setMaterials(materials);
-        objLoader.setPath('./models/'); // for HTML
-        objLoader.load(modelPath + '.obj', function (object) {
+        objLoader.setPath("./models/"); // for HTML
+        objLoader.load(modelPath + ".obj", function(object) {
             //build partsDictionnary partName = partGUID
             //first element is ignored
             var tempPartsArray;
-            for (var i = 0; i < object.children.length; i++) {                
+            for (var i = 0; i < object.children.length; i++) {
                 if (partsDictionary[object.children[i].name] === undefined) {
-                    tempPartsArray= [object.children[i].id];
+                    tempPartsArray = [object.children[i].id];
                     partsDictionary[object.children[i].name] = tempPartsArray;
                     partsMap.set(object.children[i].name, tempPartsArray);
-                }
-                else {
+                } else {
                     tempPartsArray = partsDictionary[object.children[i].name];
                     tempPartsArray.push(object.children[i].id);
                     partsDictionary[object.children[i].name] = tempPartsArray;
@@ -100,8 +104,8 @@ function init3D(modelPath) {
             tempPartsArray = null;
 
             // TODO : use parameter rather than string - for adding multiple object feature (later)
-            object.name = 'importedObject';
-            scene.add(object);    
+            object.name = "importedObject";
+            scene.add(object);
         });
     });
 }
